@@ -1,12 +1,12 @@
 const products = [
-  { id: 1, name: "Wireless Headphones", price: 59.99, image: "https://powermaccenter.com/cdn/shop/files/SNYI100BLU012000x2000.jpg?v=1692058747" },
-  { id: 2, name: "Smartwatch", price: 79.99, image: "https://www.leafstudios.in/cdn/shop/files/1_1099cd20-7237-4bdf-a180-b7126de5ef3d_grande.png?v=1722230645" },
-  { id: 3, name: "Speaker", price: 39.99, image: "https://www.sencor.com/getmedia/6770caad-d0be-4d0d-b5f0-01bbc4c1c555/35059169.jpg.aspx?width=2100&height=2100&ext=.jpg" },
-  { id: 4, name: "Fitness Tracker", price: 49.99, image: "https://i5.walmartimages.com/seo/Fitbit-Inspire-2-Fitness-Tracker-Black_96b0eb36-17a8-4fde-a725-ff7cf9f5e675.43dfffa5bd5240f137e9c2f289ab339d.jpeg" },
-  { id: 5, name: "Mountain Bike Tires", price: 29.99, image: "https://i.ebayimg.com/images/g/vXEAAOSwjDRlqqn7/s-l1200.jpg" },
-  { id: 6, name: "Bike Chain Lubricant", price: 9.99, image: "https://bici.cc/cdn/shop/files/finish-line-dry-bike-chain-lube-8oz-accessories-maintenance-chain-lube-29413556387903.jpg?crop=center&height=1080&v=1718204765&width=1080" },
-  { id: 7, name: "Aluminum Pedals", price: 24.99, image: "https://cdn-sacredride.b-cdn.net/wp-content/uploads/2023/02/OneUp-Components_AluminumPedal_OILSLICK_Top_55942120-af70-4807-8796-838e0ee175d7_1400x.webp" },
-  { id: 8, name: "LED Bike Light Set", price: 19.99, image: "https://down-ph.img.susercontent.com/file/c377885d5700c5957f4fb075a7c033cb" }
+  { id: 1, name: "Wireless Headphones", price: 15.99, image: "https://powermaccenter.com/cdn/shop/files/SNYI100BLU012000x2000.jpg?v=1692058747" },
+  { id: 2, name: "Smartwatch", price: 7.99, image: "https://www.leafstudios.in/cdn/shop/files/1_1099cd20-7237-4bdf-a180-b7126de5ef3d_grande.png?v=1722230645" },
+  { id: 3, name: "Speaker", price: 5.99, image: "https://www.sencor.com/getmedia/6770caad-d0be-4d0d-b5f0-01bbc4c1c555/35059169.jpg.aspx?width=2100&height=2100&ext=.jpg" },
+  { id: 4, name: "Fitness Tracker", price: 10.99, image: "https://i5.walmartimages.com/seo/Fitbit-Inspire-2-Fitness-Tracker-Black_96b0eb36-17a8-4fde-a725-ff7cf9f5e675.43dfffa5bd5240f137e9c2f289ab339d.jpeg" },
+  { id: 5, name: "Mountain Bike Tires", price: 3.99, image: "https://i.ebayimg.com/images/g/vXEAAOSwjDRlqqn7/s-l1200.jpg" },
+  { id: 6, name: "Bike Chain Lubricant", price: 2.99, image: "https://bici.cc/cdn/shop/files/finish-line-dry-bike-chain-lube-8oz-accessories-maintenance-chain-lube-29413556387903.jpg?crop=center&height=1080&v=1718204765&width=1080" },
+  { id: 7, name: "Aluminum Pedals", price: 2.99, image: "https://cdn-sacredride.b-cdn.net/wp-content/uploads/2023/02/OneUp-Components_AluminumPedal_OILSLICK_Top_55942120-af70-4807-8796-838e0ee175d7_1400x.webp" },
+  { id: 8, name: "LED Bike Light Set", price: 1.99, image: "https://down-ph.img.susercontent.com/file/c377885d5700c5957f4fb075a7c033cb" }
 ];
 
 let cartItems = [];
@@ -121,7 +121,17 @@ function closeCartModal() {
 }
 
 function handleCheckoutClick() {
-  document.getElementById("checkout-modal")?.classList.remove("hidden");
+  closeCartModal(); // ✅ closes the cart before proceeding
+
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  if (!isLoggedIn) {
+    alert("Please log in or register before checking out.");
+    openSigninModal();
+  } else if (cartItems.length === 0) {
+    alert("Your cart is empty.");
+  } else {
+    document.getElementById("checkout-modal")?.classList.remove("hidden");
+  }
 }
 
 function closeCheckoutModal() {
@@ -167,6 +177,12 @@ function updateAuthUI() {
   document.getElementById("register-button")?.classList.toggle("hidden", isLoggedIn);
 }
 
+function toggleMenu() {
+  const menu = document.getElementById("header-actions");
+  menu.classList.toggle("show");
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
   renderProducts();
   updateAuthUI();
@@ -179,6 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const address = this.address.value;
     const contact = this.contact.value;
     alert(`Thank you, ${name}!\nYour order will be shipped to:\n${address}\nContact: ${contact}`);
+    this.reset();
     closeCheckoutModal();
     cartItems = [];
     updateCartCount();
@@ -212,7 +229,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Home button support
   document.getElementById("home-button")?.addEventListener("click", () => {
     document.getElementById("search-input").value = "";
     renderProducts();
