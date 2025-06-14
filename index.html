@@ -9,14 +9,22 @@
 <body>
   <header>
     <h1>Build-Build-Bicycle</h1>
-    <nav class="header-actions">
+
+    <!-- Burger Menu Icon -->
+    <div class="burger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <!-- Header Actions -->
+    <nav class="header-actions" id="header-actions">
       <div id="search-container">
         <input type="text" id="search-input" placeholder="Search products..." aria-label="Search products" />
         <button id="search-button" type="button">Search</button>
         <button id="home-button" class="hidden" type="button" onclick="showAllProducts()">Back to Home</button>
       </div>
       <button id="cart" type="button" onclick="showCartModal()">🛒 Cart (<span id="cart-count">0</span>)</button>
-      <button id="checkout-button" type="button" onclick="handleCheckoutClick()">Checkout</button>
       <button id="login-button" type="button" onclick="openSigninModal()">Login</button>
       <button id="register-button" type="button" onclick="openRegisterModal()">Register</button>
       <button id="logout-button" class="hidden" type="button" onclick="handleLogout()">Logout</button>
@@ -77,9 +85,26 @@
       <h2>Your Cart</h2>
       <div id="cart-items-list"></div>
       <p id="cart-total"></p>
-      <button onclick="closeCartModal()" type="button">Close</button>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+        <button onclick="handleCheckoutClick()" style="background-color: #111; color: #ffd700; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer;">
+          Checkout
+        </button>
+      </div>
+
+      <div style="margin-top: 10px; text-align: right;">
+        <button onclick="closeCartModal()" type="button">Close</button>
+      </div>
     </div>
   </section>
+
+  <!-- Burger menu JS toggle -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("header-actions");
+      menu.classList.toggle("show");
+    }
+  </script>
 
   <script src="script.js"></script>
 </body>
