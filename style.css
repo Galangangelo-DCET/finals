@@ -73,7 +73,6 @@ main {
   transform: translateY(-5px);
 }
 
-/* ✅ Uniform image size for all products */
 .product img {
   width: 200px;
   height: 200px;
