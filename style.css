@@ -73,9 +73,14 @@ main {
   transform: translateY(-5px);
 }
 
+/* ✅ Uniform image size for all products */
 .product img {
-  width: 100%;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
   border-radius: 8px;
+  display: block;
+  margin: 0 auto;
 }
 
 .product h3 {
@@ -272,7 +277,6 @@ footer {
   box-shadow: 0 0 8px #ffd700;
 }
 
-
 .burger {
   display: none;
   flex-direction: column;
@@ -307,7 +311,7 @@ footer {
   .header-actions.show {
     display: flex;
   }
-
+  
   .burger {
     display: flex;
   }
