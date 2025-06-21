@@ -9,20 +9,11 @@
 <body>
   <header>
     <h1>Build-Build-Bicycle</h1>
-
-    <!-- Burger Menu Icon -->
-    <div class="burger" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-
-    <!-- Header Actions -->
     <nav class="header-actions" id="header-actions">
       <div id="search-container">
-        <input type="text" id="search-input" placeholder="Search products..." aria-label="Search products" />
+        <input type="text" id="search-input" placeholder="Search products..." />
         <button id="search-button" type="button">Search</button>
-        <button id="home-button" class="hidden" type="button" onclick="showAllProducts()">Back to Home</button>
+        <button id="home-button" class="hidden" type="button" onclick="renderProducts()">Back to Home</button>
       </div>
       <button id="cart" type="button" onclick="showCartModal()">🛒 Cart (<span id="cart-count">0</span>)</button>
       <button id="login-button" type="button" onclick="openSigninModal()">Login</button>
@@ -32,20 +23,20 @@
   </header>
 
   <main>
-    <section id="product-grid" class="product-grid" aria-label="Product list"></section>
+    <section id="product-grid" class="product-grid"></section>
   </main>
 
   <footer>
     <p>&copy; 2025 BBB. All rights reserved.</p>
   </footer>
 
-  <!-- Modals -->
-  <section id="signin-modal" class="modal hidden" aria-hidden="true" role="dialog">
+  <!-- Sign In Modal -->
+  <section id="signin-modal" class="modal hidden" role="dialog">
     <div class="modal-content">
       <h2>Sign In</h2>
       <form id="signin-form">
-        <label>Email:<input type="email" name="email" required aria-required="true" /></label>
-        <label>Password:<input type="password" name="password" required aria-required="true" /></label>
+        <label>Email:<input type="email" name="email" required /></label>
+        <label>Password:<input type="password" name="password" required /></label>
         <button type="submit">Sign In</button>
         <p>Don't have an account? <a href="#" onclick="switchToRegister()">Register here</a></p>
         <button type="button" onclick="closeSigninModal()">Cancel</button>
@@ -53,12 +44,13 @@
     </div>
   </section>
 
-  <section id="register-modal" class="modal hidden" aria-hidden="true" role="dialog">
+  <!-- Register Modal -->
+  <section id="register-modal" class="modal hidden" role="dialog">
     <div class="modal-content">
       <h2>Register</h2>
       <form id="register-form">
-        <label>Email:<input type="email" name="email" required aria-required="true" /></label>
-        <label>Password:<input type="password" name="password" required aria-required="true" /></label>
+        <label>Email:<input type="email" name="email" required /></label>
+        <label>Password:<input type="password" name="password" required /></label>
         <button type="submit">Register</button>
         <p>Already have an account? <a href="#" onclick="switchToSignin()">Sign in here</a></p>
         <button type="button" onclick="closeRegisterModal()">Cancel</button>
@@ -66,45 +58,33 @@
     </div>
   </section>
 
-  <section id="checkout-modal" class="modal hidden" aria-hidden="true" role="dialog">
+  <!-- Checkout Modal -->
+  <section id="checkout-modal" class="modal hidden" role="dialog">
     <div class="modal-content">
       <h2>Checkout</h2>
-      <div id="checkout-items" style="margin-bottom: 10px;"></div>
+      <div id="checkout-items" class="checkout-items"></div>
       <form id="checkout-form">
-        <label>Name:<input type="text" name="name" required aria-required="true" /></label>
-        <label>Address:<textarea name="address" required aria-required="true"></textarea></label>
-        <label>Contact Number:<input type="tel" name="contact" required aria-required="true" /></label>
+        <label>Name:<input type="text" name="name" required /></label>
+        <label>Address:<textarea name="address" required></textarea></label>
+        <label>Contact Number:<input type="tel" name="contact" required /></label>
         <button type="submit">Submit Order</button>
         <button type="button" onclick="closeCheckoutModal()">Cancel</button>
       </form>
     </div>
   </section>
 
-  <section id="cart-modal" class="modal hidden" aria-hidden="true" role="dialog">
+  <!-- Cart Modal -->
+  <section id="cart-modal" class="modal hidden" role="dialog">
     <div class="modal-content">
       <h2>Your Cart</h2>
       <div id="cart-items-list"></div>
       <p id="cart-total"></p>
-
-      <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-        <button onclick="handleCheckoutClick()" style="background-color: #111; color: #ffd700; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer;">
-          Checkout
-        </button>
-      </div>
-
-      <div style="margin-top: 10px; text-align: right;">
-        <button onclick="closeCartModal()" type="button">Close</button>
+      <div class="cart-modal-actions">
+        <button onclick="handleCheckoutClick()">Checkout</button>
+        <button onclick="closeCartModal()">Close</button>
       </div>
     </div>
   </section>
-
-  <!-- Burger menu JS toggle -->
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("header-actions");
-      menu.classList.toggle("show");
-    }
-  </script>
 
   <script src="script.js"></script>
 </body>
