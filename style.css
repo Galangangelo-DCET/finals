@@ -105,7 +105,6 @@ main {
   color: #111;
 }
 
-/* Modal styling */
 .modal {
   position: fixed;
   top: 0;
@@ -206,7 +205,6 @@ footer {
   display: none;
 }
 
-/* Search Bar Styling */
 #search-container {
   display: flex;
   align-items: center;
@@ -252,7 +250,6 @@ footer {
   box-shadow: 0 0 8px #ffd700;
 }
 
-/* Back and Home Button Styling */
 .back-button,
 .home-button {
   background-color: #ffd700;
@@ -275,7 +272,7 @@ footer {
   box-shadow: 0 0 8px #ffd700;
 }
 
-/* Burger Menu Styles */
+
 .burger {
   display: none;
   flex-direction: column;
@@ -292,7 +289,6 @@ footer {
   transition: 0.3s ease;
 }
 
-/* Mobile Responsive Header */
 @media (max-width: 768px) {
   .header-actions {
     display: none;
