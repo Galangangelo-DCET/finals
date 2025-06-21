@@ -1,157 +1,113 @@
 const products = [
-  { id: 1, name: "Wireless Headphones", price: 15.99, image: "https://powermaccenter.com/cdn/shop/files/SNYI100BLU012000x2000.jpg?v=1692058747" },
-  { id: 2, name: "Smartwatch", price: 7.99, image: "https://www.leafstudios.in/cdn/shop/files/1_1099cd20-7237-4bdf-a180-b7126de5ef3d_grande.png?v=1722230645" },
-  { id: 3, name: "Speaker", price: 5.99, image: "https://www.sencor.com/getmedia/6770caad-d0be-4d0d-b5f0-01bbc4c1c555/35059169.jpg.aspx?width=2100&height=2100&ext=.jpg" },
-  { id: 4, name: "Fitness Tracker", price: 10.99, image: "https://i5.walmartimages.com/seo/Fitbit-Inspire-2-Fitness-Tracker-Black_96b0eb36-17a8-4fde-a725-ff7cf9f5e675.43dfffa5bd5240f137e9c2f289ab339d.jpeg" },
-  { id: 5, name: "Mountain Bike Tires", price: 3.99, image: "https://i.ebayimg.com/images/g/vXEAAOSwjDRlqqn7/s-l1200.jpg" },
-  { id: 6, name: "Bike Chain Lubricant", price: 2.99, image: "https://bici.cc/cdn/shop/files/finish-line-dry-bike-chain-lube-8oz-accessories-maintenance-chain-lube-29413556387903.jpg?crop=center&height=1080&v=1718204765&width=1080" },
-  { id: 7, name: "Aluminum Pedals", price: 2.99, image: "https://cdn-sacredride.b-cdn.net/wp-content/uploads/2023/02/OneUp-Components_AluminumPedal_OILSLICK_Top_55942120-af70-4807-8796-838e0ee175d7_1400x.webp" },
-  { id: 8, name: "LED Bike Light Set", price: 1.99, image: "https://down-ph.img.susercontent.com/file/c377885d5700c5957f4fb075a7c033cb" }
+  { id: 1, name: "Wireless Headphones", price: 5000, image: "https://powermaccenter.com/cdn/shop/files/SNYI100BLU012000x2000.jpg?v=1692058747" },
+  { id: 2, name: "Smartwatch", price: 3000, image: "https://www.leafstudios.in/cdn/shop/files/1_1099cd20-7237-4bdf-a180-b7126de5ef3d_grande.png?v=1722230645" },
+  { id: 3, name: "Speaker", price: 1500, image: "https://www.sencor.com/getmedia/6770caad-d0be-4d0d-b5f0-01bbc4c1c555/35059169.jpg.aspx?width=2100&height=2100&ext=.jpg" },
+  { id: 4, name: "Fitness Tracker", price: 2000, image: "https://i5.walmartimages.com/seo/Fitbit-Inspire-2-Fitness-Tracker-Black_96b0eb36-17a8-4fde-a725-ff7cf9f5e675.43dfffa5bd5240f137e9c2f289ab339d.jpeg" },
+  { id: 5, name: "Mountain Bike Tires", price: 250, image: "https://i.ebayimg.com/images/g/vXEAAOSwjDRlqqn7/s-l1200.jpg" },
+  { id: 6, name: "Bike Chain Lubricant", price: 150, image: "https://bici.cc/cdn/shop/files/finish-line-dry-bike-chain-lube-8oz-accessories-maintenance-chain-lube-29413556387903.jpg" },
+  { id: 7, name: "Aluminum Pedals", price: 200, image: "https://cdn-sacredride.b-cdn.net/wp-content/uploads/2023/02/OneUp-Components_AluminumPedal_OILSLICK_Top_55942120-af70-4807-8796-838e0ee175d7_1400x.webp" },
+  { id: 8, name: "LED Bike Light Set", price: 200, image: "https://down-ph.img.susercontent.com/file/c377885d5700c5957f4fb075a7c033cb" }
 ];
 
 let cartItems = [];
 
-function renderProducts(filteredProducts = products) {
+function renderProducts(filtered = products) {
   const grid = document.getElementById("product-grid");
-  if (!grid) return;
-
   grid.innerHTML = "";
-  grid.className = "product-grid";
-
-  filteredProducts.forEach(product => {
-    const card = document.createElement("div");
-    card.className = "product";
-    card.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" />
-      <h3>${product.name}</h3>
-      <p>$${product.price.toFixed(2)}</p>
-      <button onclick="addToCart(${product.id})">Add to Cart</button>
+  filtered.forEach(product => {
+    grid.innerHTML += `
+      <div class="product">
+        <img src="${product.image}" alt="${product.name}" />
+        <h3>${product.name}</h3>
+        <p>₱${product.price.toFixed(2)}</p>
+        <button data-id="${product.id}" class="add-to-cart-btn">Add to Cart</button>
+      </div>
     `;
-    grid.appendChild(card);
+  });
+
+  document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      addToCart(parseInt(btn.getAttribute('data-id')));
+    });
   });
 }
 
 function handleSearch() {
-  const query = document.getElementById("search-input")?.value.toLowerCase() || "";
-  const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+  const input = document.getElementById("search-input").value.toLowerCase();
+  const filtered = products.filter(p => p.name.toLowerCase().includes(input));
   renderProducts(filtered);
-}
-
-function addToCart(productId) {
-  const product = products.find(p => p.id === productId);
-  if (product) {
-    const existingItem = cartItems.find(item => item.id === productId);
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cartItems.push({ ...product, quantity: 1 });
-    }
-    updateCartCount();
-    alert(`${product.name} added to cart.`);
-  }
-}
-
-function updateCartCount() {
-  const countEl = document.getElementById("cart-count");
-  if (countEl) {
-    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    countEl.textContent = totalItems;
-  }
+  document.getElementById("home-button").classList.remove("hidden");
 }
 
 function showCartModal() {
-  const modal = document.getElementById("cart-modal");
   const list = document.getElementById("cart-items-list");
   const total = document.getElementById("cart-total");
-  if (!modal || !list || !total) return;
-
   list.innerHTML = "";
   let totalPrice = 0;
 
-  cartItems.forEach((item) => {
+  cartItems.forEach(item => {
     totalPrice += item.price * item.quantity;
-    const div = document.createElement("div");
-    div.className = "cart-item";
-    div.innerHTML = `
-      <span>${item.name}</span>
-      <div style="display: flex; align-items: center; gap: 5px;">
-        <button onclick="decreaseQuantity(${item.id})">-</button>
-        <span>${item.quantity}</span>
-        <button onclick="increaseQuantity(${item.id})">+</button>
-        <button onclick="removeFromCart(${item.id})">🗑️</button>
+    list.innerHTML += `
+      <div class="cart-item">
+        <span>${item.name}</span>
+        <div>
+          <button class="decrease" data-id="${item.id}">-</button>
+          <span>${item.quantity}</span>
+          <button class="increase" data-id="${item.id}">+</button>
+          <button class="remove" data-id="${item.id}">🗑️</button>
+        </div>
+        <span>₱${(item.price * item.quantity).toFixed(2)}</span>
       </div>
-      <span>$${(item.price * item.quantity).toFixed(2)}</span>
     `;
-    list.appendChild(div);
   });
 
-  total.textContent = `Total: $${totalPrice.toFixed(2)}`;
-  modal.classList.remove("hidden");
-}
+  total.textContent = `Total: ₱${totalPrice.toFixed(2)}`;
+  document.getElementById("cart-modal").classList.remove("hidden");
 
-function increaseQuantity(productId) {
-  const item = cartItems.find(p => p.id === productId);
-  if (item) {
-    item.quantity += 1;
-    updateCartCount();
-    showCartModal();
-  }
-}
-
-function decreaseQuantity(productId) {
-  const item = cartItems.find(p => p.id === productId);
-  if (item) {
-    item.quantity -= 1;
-    if (item.quantity <= 0) {
-      cartItems = cartItems.filter(p => p.id !== productId);
-    }
-    updateCartCount();
-    showCartModal();
-  }
-}
-
-function removeFromCart(productId) {
-  cartItems = cartItems.filter(p => p.id !== productId);
-  updateCartCount();
-  showCartModal();
-}
-
-function closeCartModal() {
-  document.getElementById("cart-modal")?.classList.add("hidden");
+  // Event bindings
+  document.querySelectorAll('.increase').forEach(btn =>
+    btn.addEventListener('click', () => increaseQuantity(parseInt(btn.dataset.id)))
+  );
+  document.querySelectorAll('.decrease').forEach(btn =>
+    btn.addEventListener('click', () => decreaseQuantity(parseInt(btn.dataset.id)))
+  );
+  document.querySelectorAll('.remove').forEach(btn =>
+    btn.addEventListener('click', () => removeFromCart(parseInt(btn.dataset.id)))
+  );
 }
 
 function handleCheckoutClick() {
-  closeCartModal(); // ✅ closes the cart before proceeding
-
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  if (!isLoggedIn) {
-    alert("Please log in or register before checking out.");
+  const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+  if (!loggedIn) {
+    closeCartModal();
     openSigninModal();
-  } else if (cartItems.length === 0) {
-    alert("Your cart is empty.");
-  } else {
-    document.getElementById("checkout-modal")?.classList.remove("hidden");
+    return;
   }
+  document.getElementById("checkout-modal").classList.remove("hidden");
+}
+
+function closeCartModal() {
+  document.getElementById("cart-modal").classList.add("hidden");
 }
 
 function closeCheckoutModal() {
-  document.getElementById("checkout-modal")?.classList.add("hidden");
+  document.getElementById("checkout-modal").classList.add("hidden");
 }
 
 function openSigninModal() {
-  document.getElementById("signin-modal")?.classList.remove("hidden");
+  document.getElementById("signin-modal").classList.remove("hidden");
 }
 
 function closeSigninModal() {
-  document.getElementById("signin-modal")?.classList.add("hidden");
+  document.getElementById("signin-modal").classList.add("hidden");
 }
 
 function openRegisterModal() {
-  document.getElementById("register-modal")?.classList.remove("hidden");
+  document.getElementById("register-modal").classList.remove("hidden");
 }
 
 function closeRegisterModal() {
-  document.getElementById("register-modal")?.classList.add("hidden");
+  document.getElementById("register-modal").classList.add("hidden");
 }
 
 function switchToRegister() {
@@ -167,70 +123,90 @@ function switchToSignin() {
 function handleLogout() {
   localStorage.setItem("isLoggedIn", "false");
   updateAuthUI();
-  alert("You have been logged out.");
 }
 
 function updateAuthUI() {
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  document.getElementById("logout-button")?.classList.toggle("hidden", !isLoggedIn);
-  document.getElementById("login-button")?.classList.toggle("hidden", isLoggedIn);
-  document.getElementById("register-button")?.classList.toggle("hidden", isLoggedIn);
+  const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+  document.getElementById("logout-button").classList.toggle("hidden", !loggedIn);
+  document.getElementById("login-button").classList.toggle("hidden", loggedIn);
+  document.getElementById("register-button").classList.toggle("hidden", loggedIn);
 }
 
-function toggleMenu() {
-  const menu = document.getElementById("header-actions");
-  menu.classList.toggle("show");
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  const item = cartItems.find(i => i.id === id);
+  if (item) item.quantity++;
+  else cartItems.push({ ...product, quantity: 1 });
+  updateCartCount();
 }
 
+function updateCartCount() {
+  document.getElementById("cart-count").textContent =
+    cartItems.reduce((sum, i) => sum + i.quantity, 0);
+}
 
-document.addEventListener("DOMContentLoaded", function () {
+function increaseQuantity(id) {
+  const item = cartItems.find(i => i.id === id);
+  if (item) item.quantity++;
+  updateCartCount();
+  showCartModal();
+}
+
+function decreaseQuantity(id) {
+  const item = cartItems.find(i => i.id === id);
+  if (item) {
+    item.quantity--;
+    if (item.quantity <= 0) cartItems = cartItems.filter(i => i.id !== id);
+  }
+  updateCartCount();
+  showCartModal();
+}
+
+function removeFromCart(id) {
+  cartItems = cartItems.filter(i => i.id !== id);
+  updateCartCount();
+  showCartModal();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
   updateAuthUI();
 
-  document.getElementById("search-button")?.addEventListener("click", handleSearch);
+  document.getElementById("search-button").addEventListener("click", handleSearch);
+  document.getElementById("home-button").addEventListener("click", () => {
+    renderProducts();
+    document.getElementById("home-button").classList.add("hidden");
+  });
 
-  document.getElementById("checkout-form")?.addEventListener("submit", function(e) {
+  document.getElementById("cart").addEventListener("click", showCartModal);
+  document.getElementById("checkout-btn").addEventListener("click", handleCheckoutClick);
+  document.getElementById("close-cart-btn").addEventListener("click", closeCartModal);
+  document.getElementById("close-checkout-btn").addEventListener("click", closeCheckoutModal);
+
+  document.getElementById("signin-form").addEventListener("submit", e => {
     e.preventDefault();
-    const name = this.name.value;
-    const address = this.address.value;
-    const contact = this.contact.value;
-    alert(`Thank you, ${name}!\nYour order will be shipped to:\n${address}\nContact: ${contact}`);
-    this.reset();
+    localStorage.setItem("isLoggedIn", "true");
+    closeSigninModal();
+    updateAuthUI();
+  });
+
+  document.getElementById("register-form").addEventListener("submit", e => {
+    e.preventDefault();
+    localStorage.setItem("isLoggedIn", "true");
+    closeRegisterModal();
+    updateAuthUI();
+  });
+
+  document.getElementById("checkout-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const address = e.target.address.value;
+    const contact = e.target.contact.value;
+    const total = cartItems.reduce((sum, i) => sum + (i.price * i.quantity), 0).toFixed(2);
+
+    alert(`Thank you, ${name}!\nYour order total is ₱${total}.\nShipping to: ${address}\nContact: ${contact}`);
     closeCheckoutModal();
     cartItems = [];
     updateCartCount();
-  });
-
-  document.getElementById("signin-form")?.addEventListener("submit", function(e) {
-    e.preventDefault();
-    const email = this.email.value;
-    const password = this.password.value;
-    if (email && password) {
-      localStorage.setItem("isLoggedIn", "true");
-      closeSigninModal();
-      updateAuthUI();
-      alert("You are now logged in!");
-    } else {
-      alert("Please enter email and password.");
-    }
-  });
-
-  document.getElementById("register-form")?.addEventListener("submit", function(e) {
-    e.preventDefault();
-    const email = this.email.value;
-    const password = this.password.value;
-    if (email && password) {
-      localStorage.setItem("isLoggedIn", "true");
-      closeRegisterModal();
-      updateAuthUI();
-      alert("You have registered and are now logged in!");
-    } else {
-      alert("Please enter email and password.");
-    }
-  });
-
-  document.getElementById("home-button")?.addEventListener("click", () => {
-    document.getElementById("search-input").value = "";
-    renderProducts();
   });
 });
